@@ -9,6 +9,10 @@ var usersRouter = require('./routes/users');
 var providersRouter = require('./routes/providers');
 var apiRouter = require('./api/routes/main.routes');
 
+
+// TO DO - REMOVE LATER
+const db = require('./api/db/db');
+
 var app = express();
 
 // view engine setup
