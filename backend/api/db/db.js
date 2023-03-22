@@ -13,6 +13,4 @@ mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
 
 
 
-
-
 module.exports = Provider;
