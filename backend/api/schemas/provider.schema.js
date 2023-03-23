@@ -13,7 +13,7 @@ const companySchema = new Schema (
         "state": {type: String, required: true, min: 2, max:2},
         "postal_code": {type: String, required: true, min:50},
         "phone": {type: String, required: true},
-        "email": {type: String, required: true},
+        "email": {type: String, required: true, unique: true},
         "description": String,
         "tagline": String
     }

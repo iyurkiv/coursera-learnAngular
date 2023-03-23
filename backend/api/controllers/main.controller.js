@@ -8,40 +8,6 @@ function isEmptyList(obj) {
     return (!obj || obj.length == 0 || Object.keys(obj).length == 0);
 }
 
-// function existsProvider(id){
-//     return providers.find(provider => provider.id ==id);
-// }
-
-// function getUniqueId(providers){
-//     let min = 100000;
-//     let max = 999999;
-//     do 
-//     var id = Math.floor(Math.random() * (max-min)+min); // create a random ID
-//     while (existsProvider(id))
-//     return id;
-// }
-
-// CRUD     Post, Get, Put, Delete
-
-// POST     
-module.exports.create = function (req, res) {
-    if (isEmptyList(providers)) {
-        providers = [];
-    }
-
-    var id = req.body.id;
-    if (existsProvider(id)) {
-        id = getUniqueId();
-    }
-
-    var provider = req.body;    // the body of the request already has the object in proper format
-    provider.id = id;
-
-    providers.push(provider);   // add to list
-    res.status(200);
-    res.send(provider);
-}
-
 
 // handle error
 function handleError(res, error) {
@@ -49,6 +15,24 @@ function handleError(res, error) {
     res.send("Something went wrong. \n" + error);
 }
 
+
+// CRUD     Post, Get, Put, Delete
+
+// POST     
+module.exports.create = function (req, res) {
+    try {
+        var provider = req.body;    // the body of the request already has the object in proper format
+        Provider.create(provider)
+            .then(result => {
+                res.status(201);
+                res.send(result);
+            })
+            .catch(error => handleError(res, error));
+    }
+    catch (error) {
+        handleError(res, error)
+    }
+}
 
 // GET ALL  /api/providers
 module.exports.readAll = function (req, res) {
@@ -96,26 +80,23 @@ module.exports.readOne = function (req, res) {
 
 // PUT Update   //api/providers/id
 module.exports.update = function (req, res) {
-    if (isEmptyList(providers)) {
-        res.status(404);
-        res.send('List is empty. Cannot Update')
+    try {
+        let id = ObjectId(req.params.id);
+        let provider = req.body;
+
+        Provider.findOneAndUpdate({'_id':id},provider,{new: true})
+            .then( result => {
+                if (isEmptyList(result)) {
+                    res.status(400);
+                    res.send('List is empty. Cannot Update')
+                }
+            })
+            .catch(error => handleError(error))
+
     }
-    let id = req.params.id;
-    let provider = providers.find(provider => provider.id == id)
-    provider.firstname = req.body.firstname;
-    provider.lastname = req.body.lastname;
-    provider.position = req.body.position;
-    provider.company.company_name = req.body.company.company_name;
-    provider.company.address = req.body.company.address;
-    provider.company.address2 = req.body.company.address2;
-    provider.company.city = req.body.company.city;
-    provider.company.postal_code = req.body.company.postal_code;
-    provider.company.email = req.body.company.email;
-    provider.company.phone = req.body.company.phone;
-    provider.company.description = req.body.company.description;
-    provider.company.tagline = req.body.company.tagline;
-    res.status(200);
-    res.send(provider);
+    catch (error) {
+        handleError(res, error)
+    }
 }
 
 // DELETE   //api/providers/id
