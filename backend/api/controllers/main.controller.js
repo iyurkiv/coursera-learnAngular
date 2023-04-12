@@ -84,8 +84,8 @@ module.exports.update = function (req, res) {
         let id = ObjectId(req.params.id);
         let provider = req.body;
 
-        Provider.findOneAndUpdate({'_id':id},provider,{new: true})
-            .then( result => {
+        Provider.findOneAndUpdate({ '_id': id }, provider, { new: true })
+            .then(result => {
                 if (isEmptyList(result)) {
                     res.status(400);
                     res.send('List is empty. Cannot Update')
@@ -101,23 +101,41 @@ module.exports.update = function (req, res) {
 
 // DELETE   //api/providers/id
 module.exports.deleteOne = function (req, res) {
-    if (isEmptyList(providers)) {
-        res.status(404);
-        res.send('List is empty. Cannot Delete')
+    try {
+        let id = ObjectId(req.params.id);
+
+        Provider.findOneAndDelete({ '_id': id })
+            .then(result => {
+                if (isEmptyList(result)) {
+                    res.status(404);
+                    res.send('List is empty. Cannot Delete')
+                }
+            })
+            .catch(error => handleError(res, error));
+
+        res.status(200);
+        res.send(provider);
     }
-    let id = req.params.id;
-    let provider = providers.find(provider => provider.id == id)
-
-    let idx = providers.indexOf(provider);     // find index
-    providers.splice(idx, 1);   // remove from list
-
-    res.status(200);
-    res.send(provider);
+    catch (error) {
+        handleError(res, error);
+    }
 }
 
 // DELETE ALL
 module.exports.deleteAll = function (req, res) {
-    providers = [];
-    res.status(200);
-    res.send("Deleted All Providers");
+    try {
+        Provider.deleteMany({})
+            .then(result => {
+                if (result.deletedCount === 0) {
+                    res.status(400);
+                    res.send("List is empty. Nothing to delete.");
+                }
+                res.status(200);
+                res.send('All providers deleted');
+            })
+            .catch(error => handleError(res, error));   
+    }
+    catch (error) {
+        handleError(res, error);
+    }
 }
