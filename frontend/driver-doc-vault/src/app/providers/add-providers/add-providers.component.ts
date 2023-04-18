@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProviderClass } from 'src/app/models/providers.class';
 import { providers } from 'src/app/models/providers.data';
 
@@ -12,16 +12,15 @@ export class AddProvidersComponent implements OnInit {
   submitted = false;
   provider = new ProviderClass();
   providersForm : FormGroup;
-  
   constructor() {}
 
   ngOnInit(): void {
     this.providersForm = new FormGroup({
-      firstname : new FormControl('Christian'),
+      firstname : new FormControl('Christian',[Validators.required, Validators.minLength(2)] ),
       lastname : new FormControl('Hur'),
       position : new FormControl(),
-      email : new FormControl(),
-      phone : new FormControl(),
+      email : new FormControl([Validators.required, Validators.email]),
+      phone : new FormControl([Validators.required, Validators.pattern('^[2-9]{3}--[0-9]{3}-[0-9]{4}$')]),
       company_name : new FormControl(),
       address : new FormControl(),
       address2 : new FormControl(),
@@ -51,13 +50,16 @@ export class AddProvidersComponent implements OnInit {
       this.provider.firstname = p.firstname;
       this.provider.lastname = p.lastname;
       this.provider.position = p.position;
-      this.provider.company = {
+      this.provider.company = 
+      {
         company_name : p.company_name,
         address : p.address,
         address2 : p.address2,
         city : p.city,
         state : p.state,
         postal_code : p.postal_code,
+        phone : p.phone,
+        email : p.email,
         description : p.description,
         tagline : p.tagline,
       };
