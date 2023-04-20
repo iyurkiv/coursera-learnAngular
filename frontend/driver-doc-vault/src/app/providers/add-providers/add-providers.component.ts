@@ -32,6 +32,8 @@ export class AddProvidersComponent implements OnInit {
     });
   }
   
+  // method to easy access form field controls
+  get f(){return this.providersForm.controls;}
 
   handleSubmit(){
     console.log(this.providersForm.value);

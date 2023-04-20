@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,6 +13,7 @@ import { NotfoundComponent } from './notfound/notfound.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavComponent } from './nav/nav.component';
 import { ProvidersModule } from './providers/providers.module';
+
 
 @NgModule({
   declarations: [
@@ -28,7 +30,8 @@ import { ProvidersModule } from './providers/providers.module';
     FormsModule,
     AboutModule,
     UserModule,
-    ProvidersModule
+    ProvidersModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
