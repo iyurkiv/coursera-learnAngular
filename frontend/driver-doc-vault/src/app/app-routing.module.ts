@@ -20,6 +20,7 @@ const routes: Routes = [
   {path:"providers", component:ProvidersComponent},
   {path:"providers/add-provider-form", component:AddProvidersComponent},
   {path:"providers/edit/:id", component:EditProvidersComponent},
+  {path:"providers/delete/:id", component:EditProvidersComponent},
   {path:"providers/details/:id", component:DetailsProvidersComponent},
   {path:"**", component:HomeComponent}
 
